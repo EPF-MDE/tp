@@ -16,7 +16,9 @@ object ClimateService {
    * @param description "my awesome sentence contains a key word like climate change"
    * @return Boolean True
    */
-  def isClimateRelated(description: String): Boolean = ???
+  def isClimateRelated(description: String): Boolean = {
+      description.contains("global warning")|| description.contains("IPCC")||description.contains("climate change")
+  }
 
   /**
    * parse a list of raw data and transport it with type into a list of CO2Record
@@ -24,14 +26,26 @@ object ClimateService {
    * --> Some(value)
    * otherwise : None
    */
-  def parseRawData(list: List[(Int, Int, Double)]) : List[Option[CO2Record]] = ???
+  def parseRawData(list: List[(Int, Int, Double)]) : List[Option[CO2Record]] = {
+    var listCO2 = list.map(point => {
+      if (point._3>0){
+        Some(CO2Record(point._1,point._2,point._3))
+      }else {
+        None
+      }
+    })
+    listCO2
+  }
+
 
   /**
    * remove all values from december (12) of every year
    *
    * @param list
    * @return a list
-   */
+[]{}
+    
+     */
   def filterDecemberData(list: List[Option[CO2Record]]) : List[CO2Record] = ???
 
   /**
@@ -46,9 +60,25 @@ object ClimateService {
     logger.info("Call record.show function here inside a map function")
   }
 
-  def getMinMax() : (Int, Int) = ???
+  def getMinMax(list: List[Option[CO2Record]]) : (Double, Double) = {  
 
-  def getMinMaxByYear(year: Int) : (Int, Int) = ???
+    val listCO2 = list.flatten.map(point => {
+      point.ppm
+    })
+
+   (listCO2.min,listCO2.max)
+  }
+
+  def getMinMaxByYear(Year : Int, list: List[Option[CO2Record]]) : (Double, Double) = {
+  
+   /* val listCO2 = list.flatten.map(point => {
+      point.ppm
+      point.year
+    })
+    if (listCO2.year == year){
+      (listCO2.ppm.min,listCO2.ppm.max)
+    }*/
+  }
 
   /**
    * CO2 record from 1958 to 2022
